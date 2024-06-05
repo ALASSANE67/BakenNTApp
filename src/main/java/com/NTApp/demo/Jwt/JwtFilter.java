@@ -30,7 +30,7 @@ private ConnectionUtiliateur connectionUtiliateur;
       boolean istokenexpire = true;
 
               try {
-                  if (request.getServletPath().matches("/utilisateur/incription")){
+                  if (request.getServletPath().matches("/connection")){
                      filterChain.doFilter(request,response);
                   }else {
                       final  String requetheader = request.getHeader(HttpHeaders.AUTHORIZATION);

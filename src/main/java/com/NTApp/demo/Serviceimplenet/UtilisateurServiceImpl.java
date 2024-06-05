@@ -37,8 +37,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
          String motdepasse = passwordEncoder.encode(utilisateurs.getMotdepasse());
          utilisateurs.setMotdepasse(motdepasse);
+
        Utilisateurs utilisateurs1 = modelMapper.map(utilisateurs, Utilisateurs.class);
-       utilisateurRepository.save(utilisateurs1);
+        utilisateurRepository.save(utilisateurs1);
         return UtilisClasse.getResponseEntity(Environnement.UTILISATEUR_CREE, HttpStatus.CREATED);
     }
         return UtilisClasse.getResponseEntity(Environnement.UTILISATEUR_ERREUR, HttpStatus.BAD_REQUEST);

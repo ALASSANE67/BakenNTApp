@@ -28,10 +28,11 @@ public class JwtService {
 
     public Map<String,Object> genererToken(String email){
         Utilisateurs utilisateurs = (Utilisateurs) this.userDetailsService.loadUserByUsername(email);
-        Map<String, Object> jwtMap = new HashMap<>(this.genererToken(utilisateurs));
+        Map<String, Object> jwtMap = new HashMap<>(this.genereToken(utilisateurs));
+        jwtMap.put("resulta","pass");
         return jwtMap;
     }
-    public  Map<String, String> genererToken(Utilisateurs utilisateurs){
+    public  Map<String, String> genereToken(Utilisateurs utilisateurs){
 
       final long instant = System.currentTimeMillis();
      final long expiration = instant* 30 * 60 * 1000;

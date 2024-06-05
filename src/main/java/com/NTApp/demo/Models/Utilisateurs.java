@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.Collection;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Table(name = "utilisateur_tb")
 
@@ -50,12 +52,12 @@ public class Utilisateurs implements UserDetails {
 
     @Override
     public String getPassword() {
-        return getMotdepasse();
+        return this.motdepasse;
     }
 
     @Override
     public String getUsername() {
-        return getEmail();
+        return this.email;
     }
 
     @Override

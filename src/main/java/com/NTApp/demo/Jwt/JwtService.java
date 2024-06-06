@@ -8,27 +8,32 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Transactional
 @Component
 @AllArgsConstructor
+@Slf4j
 public class JwtService {
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    private final  String ENCRIPTION_KEY = "b0fdadb687f199a569367f0a6bcfd";
+    private final  String ENCRIPTION_KEY = "b0fdadb687f199a569367f0a6bcfdb0fdadb687f199a569367f0a6bcfd";
 
-    public Map<String,Object> genererToken(String email){
-        Utilisateurs utilisateurs = (Utilisateurs) this.userDetailsService.loadUserByUsername(email);
-        Map<String, Object> jwtMap = new HashMap<>(this.genereToken(utilisateurs));
+    public Map<String,String> genererToken(String email){
+        Utilisateurs utilisateur = (Utilisateurs) this.userDetailsService.loadUserByUsername(email);
+        Map<String, String> jwtMap = new HashMap<>(this.genereToken(utilisateur));
         jwtMap.put("resulta","pass");
         return jwtMap;
     }
@@ -37,25 +42,26 @@ public class JwtService {
       final long instant = System.currentTimeMillis();
      final long expiration = instant* 30 * 60 * 1000;
 
-     final    Map<String, Object> claim = Map.of(
+     final   Map<String, Object> claim = Map.of(
                 "nom",utilisateurs.getNom(),
-               "email",utilisateurs.getEmail(),
-                "roles",utilisateurs.getRoles()
+               "email",utilisateurs.getEmail()
+               // "roles",utilisateurs.getRoles()
         );
 
-     String bearer = Jwts.builder()
-             .setIssuedAt(new Date(instant))
-             .setExpiration(new Date(expiration))
-             .setSubject(utilisateurs.getEmail())
-             .setClaims(claim)
-             .signWith(getKey(), SignatureAlgorithm.HS256)
-              .compact();
+        String bearer =
+                Jwts.builder()
+                        .setIssuedAt(new Date(instant))
+                        .setExpiration(new Date(expiration))
+                        .setSubject(utilisateurs.getEmail())
+                        .setClaims(claim)
+                        .signWith(getKey(), SignatureAlgorithm.HS256)
+                        .compact();
 
         return Map.of("bearer",bearer);
     }
     private Key getKey(){
-      final  byte[] bytes = Decoders.BASE64.decode(ENCRIPTION_KEY);
-        return Keys.hmacShaKeyFor(bytes);
+        final byte[] decode = Decoders.BASE64.decode(ENCRIPTION_KEY);
+        return Keys.hmacShaKeyFor(decode) ;
     }
     public String extraUsername(String token) {
         return this.getClaim(token,Claims::getSubject);
@@ -72,7 +78,8 @@ public class JwtService {
     }
 
     private Claims getallClaimes(String token) {
-        return  Jwts.parserBuilder()
+        return  Jwts
+                .parserBuilder()
                 .setSigningKey(this.getKey())
                 .build()
                 .parseClaimsJws(token)

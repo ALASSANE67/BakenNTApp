@@ -21,5 +21,6 @@ public interface Utilisateurweb {
 
     @PostMapping(path = "/connection")
     @ResponseBody
-    Map<String,Object> connection(@RequestBody AuthentificationDto authentificationDto );
+    Map<String,String> connection(@RequestBody AuthentificationDto authentificationDto );
+
 }

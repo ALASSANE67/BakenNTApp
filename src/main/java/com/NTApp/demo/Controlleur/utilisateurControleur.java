@@ -5,6 +5,7 @@ import com.NTApp.demo.DTO.UtilisateurDto;
 import com.NTApp.demo.Jwt.JwtService;
 import com.NTApp.demo.Service.UtilisateurService;
 import com.NTApp.demo.Web.Utilisateurweb;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,16 +16,14 @@ import java.util.Map;
 
 @RestController
 public class utilisateurControleur implements Utilisateurweb {
+    @Autowired
+    private UtilisateurService utilisateurService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtService jwtService;
 
-   private UtilisateurService utilisateurService;
-   private AuthenticationManager authenticationManager;
-   private JwtService jwtService;
 
-    public utilisateurControleur(UtilisateurService utilisateurService, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.utilisateurService = utilisateurService;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
     @Override
     public ResponseEntity<String> creerutilisateur(UtilisateurDto utilisateurs) {
@@ -32,7 +31,7 @@ public class utilisateurControleur implements Utilisateurweb {
     }
 
     @Override
-    public Map<String, Object> connection(AuthentificationDto authentificationDto) {
+    public Map<String, String> connection(AuthentificationDto authentificationDto) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authentificationDto.email(),authentificationDto.motdepasse()

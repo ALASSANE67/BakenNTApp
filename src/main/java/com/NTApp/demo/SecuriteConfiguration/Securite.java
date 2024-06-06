@@ -25,11 +25,9 @@ import static org.springframework.http.HttpMethod.POST;
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
-@NoArgsConstructor
 public class Securite {
-
+    private final BCryptPasswordEncoder passwordEncoder;
     private JwtFilter jwtFilter;
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -52,13 +50,12 @@ public class Securite {
            return authenticationConfiguration.getAuthenticationManager();
     }
 
-@Bean
+    @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService){
-    DaoAuthenticationProvider daoAuthenticationProvider= new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-    daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder);
-    return daoAuthenticationProvider;
-}
-
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        return daoAuthenticationProvider;
+    }
 
 }

@@ -3,6 +3,7 @@ package com.NTApp.demo.Serviceimplenet;
 import com.NTApp.demo.DTO.UtilisateurDto;
 import com.NTApp.demo.Environement.Environnement;
 import com.NTApp.demo.Models.Utilisateurs;
+import com.NTApp.demo.Models.roles;
 import com.NTApp.demo.Repository.UtilisateurRepository;
 import com.NTApp.demo.Service.UtilisateurService;
 import com.NTApp.demo.Utils.UtilisClasse;
@@ -37,7 +38,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
          String motdepasse = passwordEncoder.encode(utilisateurs.getMotdepasse());
          utilisateurs.setMotdepasse(motdepasse);
-
+         
        Utilisateurs utilisateurs1 = modelMapper.map(utilisateurs, Utilisateurs.class);
         utilisateurRepository.save(utilisateurs1);
         return UtilisClasse.getResponseEntity(Environnement.UTILISATEUR_CREE, HttpStatus.CREATED);

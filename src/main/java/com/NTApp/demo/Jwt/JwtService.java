@@ -1,6 +1,8 @@
 package com.NTApp.demo.Jwt;
 
+import com.NTApp.demo.Models.Jwt;
 import com.NTApp.demo.Models.Utilisateurs;
+import com.NTApp.demo.Repository.JwtRepositort;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,17 +11,14 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 
 @Transactional
@@ -28,12 +27,19 @@ import java.util.function.Function;
 @Slf4j
 public class JwtService {
     private final UserDetailsService userDetailsService;
+    private final JwtRepositort jwtRepositort;
 
     private final  String ENCRIPTION_KEY = "b0fdadb687f199a569367f0a6bcfdb0fdadb687f199a569367f0a6bcfd";
 
     public Map<String,String> genererToken(String email){
         Utilisateurs utilisateur = (Utilisateurs) this.userDetailsService.loadUserByUsername(email);
         Map<String, String> jwtMap = new HashMap<>(this.genereToken(utilisateur));
+        Jwt jwt = Jwt.builder()
+                .valeur(jwtMap.get("bearer"))
+                .utilisateurs(utilisateur)
+                .expire(false)
+                .build();
+        jwtRepositort.save(jwt);
         jwtMap.put("resulta","pass");
         return jwtMap;
     }
@@ -47,6 +53,8 @@ public class JwtService {
                "email",utilisateurs.getEmail()
                // "roles",utilisateurs.getRoles()
         );
+
+
 
         String bearer =
                 Jwts.builder()

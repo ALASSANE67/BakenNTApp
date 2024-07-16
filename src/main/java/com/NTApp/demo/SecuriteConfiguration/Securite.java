@@ -3,7 +3,6 @@ package com.NTApp.demo.SecuriteConfiguration;
 
 import com.NTApp.demo.Jwt.JwtFilter;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 
@@ -37,6 +37,8 @@ public class Securite {
                         authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(POST,"/utilisateur/incription").permitAll()
                                 .requestMatchers(POST,"/utilisateur/connection").permitAll()
+                                .requestMatchers(POST,"/utilisateur/refrech_token").permitAll()
+                                .requestMatchers(GET,"/produits/tout").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

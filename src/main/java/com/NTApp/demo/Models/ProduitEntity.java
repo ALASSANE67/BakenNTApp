@@ -6,14 +6,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Table(name = "produits_tb")
-public class produitEntity {
+public class ProduitEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

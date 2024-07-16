@@ -1,4 +1,7 @@
 package com.NTApp.demo.Repository;
 
-public interface ProduitsRepository {
+import com.NTApp.demo.Models.ProduitEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProduitsRepository extends JpaRepository<ProduitEntity,Long> {
 }

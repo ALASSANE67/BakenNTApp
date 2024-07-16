@@ -1,39 +1,35 @@
 package com.NTApp.demo.Web;
 
-import com.NTApp.demo.DTO.AuthentificationDto;
-import com.NTApp.demo.DTO.UtilisateurDto;
-import com.NTApp.demo.Models.Utilisateurs;
+import com.NTApp.demo.DTO.ProduitsDto;
+import com.NTApp.demo.Models.ProduitEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RequestMapping(path = "/produits")
 @CrossOrigin("*")
-public interface produitsWeb {
+public interface ProduitsWeb {
 
-    @PostMapping("/incription")
+    @PostMapping("/cree")
     @ResponseBody
-    ResponseEntity<String> creerproduits(@RequestBody UtilisateurDto utilisateurs);
-
-
-    @PostMapping(path = "/connection")
-    @ResponseBody
-    Map<String,String> connection(@RequestBody AuthentificationDto authentificationDto );
-
-    @PostMapping(path = "/refrech_token")
-    @ResponseBody
-    Map<String, String> RefreshToken(Map<String,String> refreshToken) ;
-
+    ResponseEntity<String> creerproduits(@RequestBody ProduitsDto produitsDto);
 
     @GetMapping(path = "/tout")
     @ResponseBody
-    List<Utilisateurs> Allutilisateur();
+    List<ProduitEntity> Allproduits();
 
     @GetMapping(path = "/{id}")
     @ResponseBody
-    Optional<Utilisateurs> AllutilisateurByid(@PathVariable long id);
+    Optional<ProduitEntity> AllproduitsrByid(@PathVariable long id);
+
+    @DeleteMapping(path = "/delect/{id}")
+    @ResponseBody
+    ResponseEntity<String> delectproduitsrByid(@PathVariable long id);
+
+    @PatchMapping(path = "/update/{id}")
+    @ResponseBody
+    ResponseEntity<String>updateproduitsrByid(@PathVariable long id,@RequestBody ProduitsDto produitsDto);
 
 }
